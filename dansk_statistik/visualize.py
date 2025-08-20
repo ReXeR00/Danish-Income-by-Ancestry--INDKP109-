@@ -1,144 +1,129 @@
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 from matplotlib.ticker import StrMethodFormatter
-import mplcursors
-import plotly.express as px
 
+EN = {
+    "title_last": "Average income per person — last year",
+    "title_grouped": "Average income per person — by ancestry",
+    "ylabel_dkk": "DKK per person",
+    "forecast_suffix": "(forecast)",
+    "groups": {
+        "DANSK": "Danes",
+        "IND_VEST": "Western immigrants",
+        "IND_ANDRE": "Non-western immigrants",
+    },
+}
 
+def _rename_groups(df):
+    return df.rename(columns=EN["groups"])
 
-plt.style.use('ggplot')  
-
-def enable_hover(ax, fmt="{x}: {y:,.0f}"):
-    cursor = mplcursors.cursor(ax, hover=True)
-    @cursor.connect("add")
-    def _(sel):
-        x, y = sel.target
-        sel.annotation.set_text(fmt.format(x=int(x), y=y))
-
-
-def _thousands(ax):
-    ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
+def _format_thousands(ax):
+    ax.yaxis.set_major_formatter(StrMethodFormatter("{x:,.0f}"))
 
 def _annotate_bars(ax):
     for p in ax.patches:
         h = p.get_height()
         if np.isfinite(h):
-            ax.annotate(f"{h:,.0f}", (p.get_x()+p.get_width()/2, h),
-                        ha='center', va='bottom', fontsize=9,
-                        xytext=(0, 4), textcoords='offset points')
+            ax.annotate(
+                f"{h:,.0f}",
+                (p.get_x() + p.get_width() / 2, h),
+                ha="center",
+                va="bottom",
+                fontsize=9,
+                xytext=(0, 4),
+                textcoords="offset points",
+            )
 
-def plot_avg_income_bars_last_year_pretty(df_avg, title="Średni dochód na osobę – ostatni rok", flag_path=None, ):
-    if df_avg.empty:
-        print("⚠️ Brak danych do wykresu."); return
-    last = df_avg.index.max()
-    vals = df_avg.loc[last].dropna()
+def plot_avg_income_bars_last_year_pretty(df_avg, title=None, flag_path=None):
+    """Bar chart for the latest year (English labels only)."""
+    if df_avg is None or df_avg.empty:
+        print("⚠️ No data."); return
+    df_loc = _rename_groups(df_avg)
+    last = df_loc.index.max()
+    vals = df_loc.loc[last].dropna()
 
-    fig, ax = plt.subplots(figsize=(9,5))
+    fig, ax = plt.subplots(figsize=(9, 5))
     bars = ax.bar(vals.index, vals.values)
 
-    _thousands(ax)
+    _format_thousands(ax)
     _annotate_bars(ax)
-    ax.set_title(f"{title} ({last})")
-    ax.set_ylabel("DKK na osobę")
-    ax.grid(axis='y', linestyle='--', alpha=0.35)
+    ax.set_title(title or f"{EN['title_last']} ({last})")
+    ax.set_ylabel(EN["ylabel_dkk"])
+    ax.grid(axis="y", linestyle="--", alpha=0.35)
     fig.tight_layout()
 
-    # 🇩🇰 flaga nad słupkiem Duńczyków
+    # Optional 🇩🇰 flag over Danes bar (works if flag file exists)
     try:
-        import os
-        if flag_path and os.path.exists(flag_path) and "DANSK" in vals.index:
-            from matplotlib.offsetbox import OffsetImage, AnnotationBbox
-            import matplotlib.image as mpimg
-            idx = list(vals.index).index("DANSK")
-            bar = bars[idx]
-            img = mpimg.imread(flag_path)
-            oi = OffsetImage(img, zoom=0.08)  # dopasuj rozmiar
-            ab = AnnotationBbox(
-                oi,
-                (bar.get_x() + bar.get_width()/2, bar.get_height()),
-                xybox=(0, 18),
-                xycoords='data',
-                boxcoords=("offset points"),
-                frameon=False
-            )
-            ax.add_artist(ab)
-        elif "DANSK" in vals.index:
-            # awaryjnie — emoji w labelu
-            new_labels = [("🇩🇰 " + x) if x=="DANSK" else x for x in vals.index]
-            ax.set_xticklabels(new_labels)
+        if flag_path:
+            import os
+            if os.path.exists(flag_path) and "Danes" in vals.index:
+                from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+                import matplotlib.image as mpimg
+                idx = list(vals.index).index("Danes")
+                bar = bars[idx]
+                img = mpimg.imread(flag_path)
+                oi = OffsetImage(img, zoom=0.08)
+                ab = AnnotationBbox(
+                    oi,
+                    (bar.get_x() + bar.get_width() / 2, bar.get_height()),
+                    xybox=(0, 18),
+                    xycoords="data",
+                    boxcoords=("offset points"),
+                    frameon=False,
+                )
+                ax.add_artist(ab)
     except Exception:
         pass
-    enable_hover(ax)
+
     plt.show()
 
-
-def plot_avg_income_grouped_bars_pretty(df_avg, title="Średni dochód na osobę – wg pochodzenia"):
-    if df_avg.empty:
-        print("⚠️ Brak danych do wykresu."); return
-    years  = df_avg.index.values
-    groups = df_avg.columns.tolist()
+def plot_avg_income_grouped_bars_pretty(df_avg, title=None):
+    """Grouped bars over years (English labels only)."""
+    if df_avg is None or df_avg.empty:
+        print("⚠️ No data."); return
+    df_loc = _rename_groups(df_avg)
+    years = df_loc.index.values
+    groups = df_loc.columns.tolist()
     x = np.arange(len(years))
-    width = 0.25 if len(groups)==3 else 0.8/max(1,len(groups))
+    width = 0.25 if len(groups) == 3 else 0.8 / max(1, len(groups))
 
-    fig, ax = plt.subplots(figsize=(12,6))
+    fig, ax = plt.subplots(figsize=(12, 6))
     for i, g in enumerate(groups):
-        ax.bar(x + (i - (len(groups)-1)/2)*width, df_avg[g].values, width, label=("🇩🇰 DANSK" if g=="DANSK" else g))
+        ax.bar(x + (i - (len(groups) - 1) / 2) * width, df_loc[g].values, width, label=g)
 
-    _thousands(ax)
-    ax.set_xticks(x); ax.set_xticklabels(years)
-    ax.set_title(title); ax.set_xlabel("Rok"); ax.set_ylabel("DKK na osobę")
+    _format_thousands(ax)
+    ax.set_xticks(x)
+    ax.set_xticklabels(years)
+    ax.set_title(title or EN["title_grouped"])
+    ax.set_xlabel("Year")
+    ax.set_ylabel(EN["ylabel_dkk"])
     ax.legend()
-    ax.grid(axis='y', linestyle='--', alpha=0.35)
+    ax.grid(axis="y", linestyle="--", alpha=0.35)
     fig.tight_layout()
-    enable_hover(ax)
     plt.show()
 
+def plot_history_with_forecast(df_hist, df_fc, title=None):
+    """History + forecast (English labels only)."""
+    if df_hist is None or df_hist.empty:
+        print("⚠️ No historical data."); return
 
-def plot_history_with_forecast(df_hist, df_fc, title="Średni dochód – historia + prognoza", ):
-    if df_hist.empty:
-        print("⚠️ Brak danych historycznych."); return
-    fig, ax = plt.subplots(figsize=(12,6))
+    dfh = _rename_groups(df_hist)
+    dfc = _rename_groups(df_fc) if (df_fc is not None and not df_fc.empty) else None
 
-    # historia: linie ciągłe
-    for col in df_hist.columns:
-        ax.plot(df_hist.index, df_hist[col], marker='o', label=col, linewidth=2)
+    fig, ax = plt.subplots(figsize=(12, 6))
+    for col in dfh.columns:
+        ax.plot(dfh.index, dfh[col], marker="o", label=col, linewidth=2)
 
-    # forecast: linie przerywane
-    if df_fc is not None and not df_fc.empty:
-        for col in df_fc.columns:
-            ax.plot(df_fc.index, df_fc[col], linestyle='--', marker='o', label=f"{col} (prognoza)", linewidth=2)
+    if dfc is not None:
+        for col in dfc.columns:
+            ax.plot(dfc.index, dfc[col], linestyle="--", marker="o", label=f"{col} {EN['forecast_suffix']}", linewidth=2)
+        ax.axvline(dfh.index.max() + 0.5, color="k", linestyle=":", alpha=0.5)
 
-        # pionowa kreska oddzielająca
-        ax.axvline(df_hist.index.max()+0.5, color='k', linestyle=':', alpha=0.5)
-
-    _thousands(ax)
-    ax.set_title(title); ax.set_xlabel("Rok"); ax.set_ylabel("DKK na osobę")
-    ax.grid(True, alpha=0.3); ax.legend()
-    fig.tight_layout()\
-    
-    enable_hover(ax)
+    _format_thousands(ax)
+    ax.set_title(title or "Average income — history + forecast")
+    ax.set_xlabel("Year")
+    ax.set_ylabel(EN["ylabel_dkk"])
+    ax.grid(True, alpha=0.3)
+    ax.legend()
+    fig.tight_layout()
     plt.show()
-
-
-
-def plot_income_contribution_pie(df_totals):
-    last = df_totals.index.max()
-    vals = df_totals.loc[last].dropna()
-    labels = vals.index
-    sizes  = vals.values
-    fig, ax = plt.subplots(figsize=(7,7))
-    ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, pctdistance=0.8)
-    ax.set_title(f'Udział w łącznym dochodzie opodatkowanym ({last})')
-    plt.show()
-
-
-def plotly_income_contribution_pie(df_totals):
-    last = df_totals.index.max()
-    s = df_totals.loc[last].dropna()
-    fig = px.pie(
-        values=s.values, names=s.index,
-        title=f'Udział w łącznym dochodzie opodatkowanym ({last})',
-        hole=0.35
-    )
-    fig.update_traces(textposition='inside', textinfo='percent+label')
-    fig.show()  

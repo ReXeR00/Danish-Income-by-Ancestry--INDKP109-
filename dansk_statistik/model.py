@@ -2,7 +2,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-# próbujemy użyć sklearn; jeśli brak, spadamy do polyfit
+
 try:
     from sklearn.linear_model import LinearRegression
     _HAS_SKLEARN = True

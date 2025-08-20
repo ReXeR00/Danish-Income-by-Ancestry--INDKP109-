@@ -1,5 +1,7 @@
 # Danish Immigration & Income — StatBank DK (INDKP109)
 
+**Status:** _Actively developed._ A larger update is planned once we obtain more detailed, country-level inputs/mappings from Statistics Denmark. For now the analysis focuses on the **three main ancestry groups**; **country-level breakdowns** are on the roadmap.
+
 This project analyzes **average taxable income per person (DKK/person)** in Denmark across three ancestry groups:
 
 - **Danes** (`DANSK`)
@@ -12,7 +14,7 @@ The analysis uses **StatBank Denmark** table **INDKP109** with:
 - `ENHED = 121` (DKK per person — already per-capita),
 - national total (`REGLAND = 000`), all ages (`ALDER1 = TOT`), both sexes (`KOEN = MOK`).
 
-> There is scaffolding for **FOLK1C** (population by country of origin). It’s **not used** in the current pipeline but is ready for future extensions.
+> There is scaffolding for **FOLK1C** (population by country of origin). It’s **not used** in the current pipeline yet; it will power country-level views once the detailed inputs are finalized.
 
 ---
 
@@ -31,9 +33,10 @@ The analysis uses **StatBank Denmark** table **INDKP109** with:
 ## Roadmap
 
 - **FOLK1C integration**: country-level population; West/Non-West mapping; rankings
+- **Country-level income** views (once detailed mapping/data are available)
 - **Contribution index** = group share of total income / group share of population
 - **Exogenous drivers**: CPI (real DKK), immigration flows (VAN1AAR), employment/unemployment, GDP
-- **Interactive app** (Streamlit/Dash) as a separate optional component (not required here)
+- **Interactive app** (as a separate optional component)
 
 ---
 
@@ -42,13 +45,15 @@ The analysis uses **StatBank Denmark** table **INDKP109** with:
 Tested with:
 
 - **Python**: 3.11 (3.10+ should work)
-- **Key libraries**:
-  - pandas 2.2.x
-  - numpy 1.26+
-  - requests 2.31+
-  - matplotlib 3.8+
-  - scikit-learn 1.5+ _(optional; forecasts fall back to `numpy.polyfit` if not installed)_
-  - mplcursors 0.5+ _(optional; enables hover tooltips on Matplotlib plots)_
+
+**Key libraries**
+
+- pandas 2.2.x
+- numpy 1.26+
+- requests 2.31+
+- matplotlib 3.8+
+- scikit-learn 1.5+ _(optional; forecasts fall back to `numpy.polyfit` if not installed)_
+- mplcursors 0.5+ _(optional; enables hover tooltips on Matplotlib plots)_
 
 > You can install only the minimal set (pandas, numpy, requests, matplotlib). `scikit-learn` and `mplcursors` are optional.
 
@@ -72,24 +77,23 @@ pip install -U pip
 pip install pandas numpy requests matplotlib
 
 # 4) Optional extras
-# Forecasts via sklearn (otherwise fallback with numpy.polyfit is used):
+# Forecasts via sklearn (fallback with numpy.polyfit is used if not installed):
 # pip install scikit-learn
 # Hover tooltips on Matplotlib:
 # pip install mplcursors
-
-
 Run
+Package-style layout (src/dansk_statistik/...):
 
-If you keep a package-style layout (src/dansk_statistik/...), run:
-
+bash
+Kopiuj
+Edytuj
 python -m src.dansk_statistik.main
+Flat layout (e.g., main.py next to modules):
 
-
-If you keep a flat script (e.g., main.py next to modules), run:
-
+bash
+Kopiuj
+Edytuj
 python main.py
-
-
 The script will:
 
 fetch INDKP109 per-capita taxable income,
@@ -102,8 +106,16 @@ render a bar chart (last year), grouped bars over time, and a history-with-forec
 
 By default, it uses current_year = (today.year - 1) to avoid partially published years.
 
-StatBank query (what we ask for)
+Language
+The codebase and all plot labels are English-only. Legend mapping:
 
+DANSK → Danes
+
+IND_VEST → Western immigrants
+
+IND_ANDRE → Non-western immigrants
+
+StatBank query (what we ask for)
 INDKP109 (current scope):
 
 ALDER1 = TOT
@@ -124,22 +136,19 @@ Optional totals (for contribution pie):
 
 same filters, but ENHED = 110 (thousand DKK)
 
-FOLK1C scaffolding is present but not used in the main pipeline yet.
+FOLK1C scaffolding is present and reserved for future country-level extensions.
 
 Notes & assumptions
+Per-capita: ENHED = 121 already yields DKK/person, so no manual division is needed.
 
-Per-capita: Because ENHED = 121 is DKK/person, no manual division is needed.
+Latest year: Income data are published with a lag; we default to year − 1.
 
-Latest year: Income data are published with a lag; we default to year - 1.
-
-Forecasts: Simple time-trend models; use results as illustrative, not official projections.
+Forecasts: Simple time-trend models; results are illustrative (not official projections).
 
 License & data attribution
-
 Code: MIT (see LICENSE).
 
 Data: © Statistics Denmark, StatBank Denmark. Reuse allowed under CC BY 4.0 with source attribution.
-
 Suggested credit:
 
 “Source: Statistics Denmark — StatBank Denmark (table INDKP109), accessed YYYY-MM-DD.”
@@ -147,17 +156,15 @@ Suggested credit:
 If you publish charts, include this credit in captions or footnotes.
 
 Contributing
-
 PRs welcome. If you add variables (e.g., CPI deflation, employment), keep changes modular (features/, forecast/, plots/) and avoid breaking the simple main.py flow.
 
 FAQ
-
-Q: Where do I change the year range?
+Where do I change the year range?
 In load_INDKP109() — adjust the TID range/list. The example uses range(2015, current_year) with current_year = datetime.now().year - 1.
 
-Q: I don’t have scikit-learn. Will forecasts work?
+I don’t have scikit-learn. Will forecasts work?
 Yes. The code falls back to numpy.polyfit if scikit-learn is missing.
 
-Q: Hover doesn’t show up on plots.
+Hover doesn’t show up on plots.
 Install mplcursors and run in an environment with GUI support (local Python, not headless CI).
 ```
