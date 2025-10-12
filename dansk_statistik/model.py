@@ -11,27 +11,18 @@ except Exception:
 
 
 def _as_years(x_index: pd.Index) -> np.ndarray:
-    """Zapewnia, że indeks to lata (float) do uczenia/predykcji."""
-    years = np.asarray(x_index, dtype=float).reshape(-1, 1)
-    return years
-
+    try:
+        years_1d = pd.to_numeric(x_index, errors="raise").astype(float)
+    except Exception as e:
+        raise ValueError("Index must be numeric years like 1990, 1991, ...") from e
+    return np.asarray(years_1d).reshape(-1, 1)
 
 def forecast_linear(df_hist: pd.DataFrame, horizon: int = 10,
                     clip_min: float | None = None) -> pd.DataFrame:
-    """
-    Prosta prognoza liniowa na N lat do przodu dla każdej kolumny.
-    Wejście: df_hist z indeksem = lata (int), kolumny = grupy (DANSK / IND_VEST / IND_ANDRE),
-             wartości = DKK na osobę (np. z INDKP109, ENHED=121).
-    Zwraca: DataFrame z indeksem = lata przyszłe, te same kolumny, wartości prognozowane.
-
-    Parametry:
-      - horizon: liczba lat do przodu (np. 10)
-      - clip_min: jeżeli ustawisz np. 0, zetnie ew. ujemne predykcje do 0
-    """
     if df_hist.empty:
         return pd.DataFrame()
 
-    # lata historii i lata przyszłe
+    # historical years and future years
     start_next = int(df_hist.index.max()) + 1
     future_years = np.arange(start_next, start_next + horizon, dtype=int)
     X_hist = _as_years(df_hist.index)
@@ -44,7 +35,7 @@ def forecast_linear(df_hist: pd.DataFrame, horizon: int = 10,
         y = pd.to_numeric(df_hist[col], errors='coerce').values
         mask = np.isfinite(y)
         if mask.sum() < 2:
-            # za mało punktów do regresji — zostaw NaN
+            # not enough points for regression — leave NaN
             continue
 
         y_fit = y[mask]
@@ -55,7 +46,7 @@ def forecast_linear(df_hist: pd.DataFrame, horizon: int = 10,
             model.fit(X_fit, y_fit)
             y_pred = model.predict(X_fut)
         else:
-            # fallback: dopasuj prostą y = a*x + b
+            # fallback: fit a straight line y = a*x + b
             coeffs = np.polyfit(X_fit.ravel(), y_fit, deg=1)
             y_pred = np.polyval(coeffs, X_fut.ravel())
 
@@ -83,6 +74,7 @@ def forecast_poly(df_hist: pd.DataFrame, horizon: int = 10, degree: int = 2, cli
         y = pd.to_numeric(df_hist[col], errors='coerce').values
         mask = np.isfinite(y)
         if mask.sum() < degree + 1:
+            # not enough points for polynomial fit — leave NaN
             continue
 
         coeffs = np.polyfit(X_hist[mask], y[mask], deg=max(1, degree))

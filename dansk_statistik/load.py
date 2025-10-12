@@ -25,7 +25,7 @@ def load_INDKP109(current_year: int):
             "REGLAND": ["000"],
             "KOEN": ["MOK"],
             "HERKOMST": ["DANSK", "IND_VEST", "IND_ANDRE"],  
-            "INDKOMSTTYPE": [ "105"], #Taxable income
+            "INDKOMSTTYPE": [ "105","110","115", "120","260"], 
             "ENHED": ["121"],  # DKK per person 
             "tid": [str(y) for y in range(2015, current_year)]
         }
