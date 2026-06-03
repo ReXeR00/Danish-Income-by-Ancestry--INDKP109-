@@ -1,170 +1,94 @@
-# Danish Immigration & Income — StatBank DK (INDKP109)
+# Danish Income by Ancestry and Demographic Change
 
-**Status:** _Actively developed._ A larger update is planned once we obtain more detailed, country-level inputs/mappings from Statistics Denmark. For now the analysis focuses on the **three main ancestry groups**; **country-level breakdowns** are on the roadmap.
+This project uses public Statistics Denmark / StatBank Denmark data to study whether Denmark's demographic change is matched by economic convergence across people of Danish origin, western immigrant origin, and non-western immigrant origin.
 
-This project analyzes **average taxable income per person (DKK/person)** in Denmark across three ancestry groups:
+Central research question:
 
-- **Danes** (`DANSK`)
-- **Western immigrants** (`IND_VEST`)
-- **Non-western immigrants** (`IND_ANDRE`)
+> Is Denmark's demographic change matched by economic convergence?
 
-The analysis uses **StatBank Denmark** table **INDKP109** with:
+The analysis is exploratory and based on aggregated yearly data. It does not make causal claims about individuals.
 
-- `INDKOMSTTYPE = 105` (taxable income),
-- `ENHED = 121` (DKK per person — already per-capita),
-- national total (`REGLAND = 000`), all ages (`ALDER1 = TOT`), both sexes (`KOEN = MOK`).
+## Data Sources
 
-> There is scaffolding for **FOLK1C** (population by country of origin). It’s **not used** in the current pipeline yet; it will power country-level views once the detailed inputs are finalized.
+Source: Statistics Denmark - StatBank Denmark.
 
----
+- `INDKP109`: taxable income by ancestry group.
+- `FOLK1E`: population by ancestry/origin group.
+- `FODIE`: live births by mother's background.
+- `VAN1AAR`: immigration.
+- `VAN2AAR`: emigration.
+- `PRIS111`: consumer price index.
 
-## What’s included now
+The project uses the public StatBank API. No API keys, passwords, tokens, or environment variables are required.
 
-- Robust StatBank **API** calls (POST, CSV parsing)
-- Clean, pivoted time series: `TID` on rows; `{DANSK, IND_VEST, IND_ANDRE}` on columns
-- Last-year summary (level, delta vs Danes, ratio vs Danes)
-- Rolling means, YoY changes, base-year indices
-- Simple forecasts (5–10y) via time-trend models (linear / polynomial)
-- Clear visuals (Matplotlib), optional hover via `mplcursors`
-- Optional **contribution pie** using INDKP109 totals (`ENHED = 110`, thousand DKK)
+## Five Hypotheses
 
----
+1. **Population share**: How has population composition changed, and what do simple scenario models imply about demographic thresholds?
+2. **Income gaps**: Are taxable-income gaps vs Danish origin shrinking, stable, or widening?
+3. **Relative income growth**: Which groups have faster indexed and cumulative income growth?
+4. **Contribution index**: Is each group's taxable-income share proportional to its population share?
+5. **Births and migration context**: How do births by mother's background and citizenship-based migration flows add demographic context?
+
+## Install
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+python -m pip install -U pip
+python -m pip install -r requirements.txt
+```
+
+## Run
+
+Generate datasets, tables, and static figures:
+
+```bash
+python -m src.run_eda
+```
+
+Run hypothesis tests:
+
+```bash
+python -m src.run_hypothesis_tests
+```
+
+Run the full pipeline:
+
+```bash
+python -m src.run_all
+```
+
+Legacy shortcut:
+
+```bash
+python main.py
+```
+
+## Output Folders
+
+- `data/raw/`: cached StatBank API responses.
+- `data/processed/`: cleaned long-format datasets.
+- `data/final/`: engineered analytical datasets.
+- `reports/figures/overview/`: project overview figures.
+- `reports/figures/hypothesis_01_population_share/`: population-share figures.
+- `reports/figures/hypothesis_02_income_gap/`: income-gap figures.
+- `reports/figures/hypothesis_03_relative_income_growth/`: income-growth figures.
+- `reports/figures/hypothesis_04_contribution_index/`: contribution-index figures.
+- `reports/figures/hypothesis_05_births_migration/`: births and migration figures.
+- `reports/tables/`: summary, feature, test, and notes tables.
+- `reports/final_report.md`: compact final report.
+
+## Important Notes
+
+- FOLK1E ancestry/origin population data start in 2008Q1. The project does not fake 2000 population ancestry/origin data.
+- Births from `FODIE` are grouped by mother's background and should not be read as the child's final ancestry classification.
+- Migration features are citizenship-based proxies.
+- Deaths by the same ancestry/origin grouping are not included in the current pipeline.
+- Scenario forecasts are illustrative, not official predictions.
 
 ## Roadmap
 
-- **FOLK1C integration**: country-level population; West/Non-West mapping; rankings
-- **Country-level income** views (once detailed mapping/data are available)
-- **Contribution index** = group share of total income / group share of population
-- **Exogenous drivers**: CPI (real DKK), immigration flows (VAN1AAR), employment/unemployment, GDP
-- **Interactive app** (as a separate optional component)
-
----
-
-## Environment
-
-Tested with:
-
-- **Python**: 3.11 (3.10+ should work)
-
-**Key libraries**
-
-- pandas 2.2.x
-- numpy 1.26+
-- requests 2.31+
-- matplotlib 3.8+
-- scikit-learn 1.5+ _(optional; forecasts fall back to `numpy.polyfit` if not installed)_
-- mplcursors 0.5+ _(optional; enables hover tooltips on Matplotlib plots)_
-
-> You can install only the minimal set (pandas, numpy, requests, matplotlib). `scikit-learn` and `mplcursors` are optional.
-
----
-
-## Setup
-
-Create a virtual environment and install dependencies manually:
-
-```bash
-# 1) Create & activate venv
-python -m venv .venv
-# Windows: .venv\Scripts\activate
-# macOS/Linux:
-source .venv/bin/activate
-
-# 2) Upgrade pip
-pip install -U pip
-
-# 3) Minimal dependencies (core analysis)
-pip install pandas numpy requests matplotlib
-
-# 4) Optional extras
-# Forecasts via sklearn (fallback with numpy.polyfit is used if not installed):
-# pip install scikit-learn
-# Hover tooltips on Matplotlib:
-# pip install mplcursors
-Run
-Package-style layout (src/dansk_statistik/...):
-
-bash
-Kopiuj
-Edytuj
-python -m src.dansk_statistik.main
-Flat layout (e.g., main.py next to modules):
-
-bash
-Kopiuj
-Edytuj
-python main.py
-The script will:
-
-fetch INDKP109 per-capita taxable income,
-
-clean & pivot the data,
-
-print a last-year summary,
-
-render a bar chart (last year), grouped bars over time, and a history-with-forecast chart.
-
-By default, it uses current_year = (today.year - 1) to avoid partially published years.
-
-Language
-The codebase and all plot labels are English-only. Legend mapping:
-
-DANSK → Danes
-
-IND_VEST → Western immigrants
-
-IND_ANDRE → Non-western immigrants
-
-StatBank query (what we ask for)
-INDKP109 (current scope):
-
-ALDER1 = TOT
-
-REGLAND = 000
-
-KOEN = MOK
-
-HERKOMST ∈ {DANSK, IND_VEST, IND_ANDRE}
-
-INDKOMSTTYPE = 105 (taxable income)
-
-ENHED = 121 (DKK per person)
-
-TID = 2015..latest_complete_year
-
-Optional totals (for contribution pie):
-
-same filters, but ENHED = 110 (thousand DKK)
-
-FOLK1C scaffolding is present and reserved for future country-level extensions.
-
-Notes & assumptions
-Per-capita: ENHED = 121 already yields DKK/person, so no manual division is needed.
-
-Latest year: Income data are published with a lag; we default to year − 1.
-
-Forecasts: Simple time-trend models; results are illustrative (not official projections).
-
-License & data attribution
-Code: MIT (see LICENSE).
-
-Data: © Statistics Denmark, StatBank Denmark. Reuse allowed under CC BY 4.0 with source attribution.
-Suggested credit:
-
-“Source: Statistics Denmark — StatBank Denmark (table INDKP109), accessed YYYY-MM-DD.”
-
-If you publish charts, include this credit in captions or footnotes.
-
-Contributing
-PRs welcome. If you add variables (e.g., CPI deflation, employment), keep changes modular (features/, forecast/, plots/) and avoid breaking the simple main.py flow.
-
-FAQ
-Where do I change the year range?
-In load_INDKP109() — adjust the TID range/list. The example uses range(2015, current_year) with current_year = datetime.now().year - 1.
-
-I don’t have scikit-learn. Will forecasts work?
-Yes. The code falls back to numpy.polyfit if scikit-learn is missing.
-
-Hover doesn’t show up on plots.
-Install mplcursors and run in an environment with GUI support (local Python, not headless CI).
-```
+- Add validated country-to-origin mappings for births and migration.
+- Add compatible labor-market and age-composition controls.
+- Add uncertainty bands to scenario forecasts.
+- Keep figures and tables compact, readable, and hypothesis-focused.

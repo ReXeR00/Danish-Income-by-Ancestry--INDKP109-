@@ -1,0 +1,4 @@
+test,term,coefficient,p_value,r_squared,n_obs,status
+income gap trend: IND_VEST,year,-862.9240196078431,0.2841430719388952,0.0760064145612946,17.0,ok scipy fallback
+income gap trend: IND_ANDRE,year,1000.4191176470591,0.014439007385690086,0.33763387019486407,17.0,ok scipy fallback
+income level interaction,,,,,,statsmodels is not installed; install requirements.txt for formula regression

@@ -1,0 +1,4 @@
+year,group_code,group_name,gap_from_proportionality,income_share_minus_population_share
+2024,DANSK,Danish origin,0.058339032582215955,0.04886377602273273
+2024,IND_ANDRE,Non-western immigrant origin,-0.41278835545446246,-0.042776971593099504
+2024,IND_VEST,Western immigrant origin,-0.10353857644286346,-0.006086804429633302

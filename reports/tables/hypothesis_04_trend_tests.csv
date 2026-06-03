@@ -1,0 +1,7 @@
+test,term,coefficient,p_value,r_squared,n_obs,status,group_code,group_name,year,contribution_index,difference_from_1
+contribution index trend: DANSK,year,0.001319096438810505,5.261119772264159e-07,0.8220492270579606,17.0,ok scipy fallback,,,,,
+contribution index trend: IND_ANDRE,year,0.0016833444028279286,0.046722690230782,0.2384569484884527,17.0,ok scipy fallback,,,,,
+contribution index trend: IND_VEST,year,0.006054260949684591,0.000525522399526603,0.5625221786276897,17.0,ok scipy fallback,,,,,
+latest contribution index vs proportional benchmark,,,,,,descriptive,DANSK,Danish origin,2024.0,1.058339032582216,0.058339032582215955
+latest contribution index vs proportional benchmark,,,,,,descriptive,IND_ANDRE,Non-western immigrant origin,2024.0,0.5872116445455375,-0.41278835545446246
+latest contribution index vs proportional benchmark,,,,,,descriptive,IND_VEST,Western immigrant origin,2024.0,0.8964614235571365,-0.10353857644286346

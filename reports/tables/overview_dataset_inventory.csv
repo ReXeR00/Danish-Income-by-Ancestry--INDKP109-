@@ -1,0 +1,7 @@
+dataset_block,source_table,first_year,latest_year,frequency,unit,used_in_hypotheses,note
+Income,INDKP109,2008,2024,annual,DKK/person; thousand DKK,"H2, H3, H4","INDKP109 currently starts in 2008, but the project income analysis uses 2015 onward from the cache."
+Population,FOLK1E,2008,2025,annual Q4 snapshot,people; share,"H1, H4",FOLK1E ancestry/origin data are available from 2008Q1; no 2000 data are invented.
+Contribution,INDKP109 + FOLK1E,2008,2024,annual,share; index,H4,Requires matching income and population years.
+Births,FODIE,2007,2025,annual,live births,H5,"Births are by mother's background, not child ancestry."
+Migration,VAN1AAR + VAN2AAR,2007,2025,annual,people,H5,Citizenship-based proxy.
+CPI / real income,PRIS111,2001,2025,annual average,index,H3,Used for real-income adjustment.

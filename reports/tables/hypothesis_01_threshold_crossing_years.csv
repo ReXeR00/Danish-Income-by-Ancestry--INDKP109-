@@ -1,0 +1,19 @@
+model,threshold,crossing_year,projected_immigrant_origin_share,projected_total_population,projected_immigrant_origin_population,note
+linear,0.2,2034,0.2036563475454649,6288549.894048847,1280703.1027794087,Crossing years depend strongly on model assumptions.
+linear,0.25,2045,0.25098149580362694,6626597.1830065325,1663153.27307908,Crossing years depend strongly on model assumptions.
+linear,0.33,2064,0.33272493370408895,7210497.045751631,2399112.151521241,Crossing years depend strongly on model assumptions.
+linear,0.5,2103,0.5005140957102991,8409028.342965253,4208837.2168815285,Crossing years depend strongly on model assumptions.
+linear,0.75,not reached,,,,Crossing years depend strongly on model assumptions.
+linear,1.0,not meaningful,,,,"100% is a mathematical boundary case, not a realistic forecast threshold."
+logarithmic,0.2,2122,0.20005610225482742,8992928.205710351,1799090.1646919118,Crossing years depend strongly on model assumptions.
+logarithmic,0.25,not reached,,,,Crossing years depend strongly on model assumptions.
+logarithmic,0.33,not reached,,,,Crossing years depend strongly on model assumptions.
+logarithmic,0.5,not reached,,,,Crossing years depend strongly on model assumptions.
+logarithmic,0.75,not reached,,,,Crossing years depend strongly on model assumptions.
+logarithmic,1.0,not meaningful,,,,"100% is a mathematical boundary case, not a realistic forecast threshold."
+logistic,0.2,2033,0.2040654513045987,6257818.322325416,1277004.5201275225,Crossing years depend strongly on model assumptions.
+logistic,0.25,2044,0.2522288798090241,6595865.611283109,1663667.7945048024,Crossing years depend strongly on model assumptions.
+logistic,0.33,2074,0.331448482897612,7517812.762985893,2491767.634999979,Crossing years depend strongly on model assumptions.
+logistic,0.5,not reached,,,,Crossing years depend strongly on model assumptions.
+logistic,0.75,not reached,,,,Crossing years depend strongly on model assumptions.
+logistic,1.0,not meaningful,,,,"100% is a mathematical boundary case, not a realistic forecast threshold."

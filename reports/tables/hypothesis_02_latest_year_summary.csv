@@ -1,0 +1,4 @@
+year,group_code,group_name,income_dkk_per_person,total_income_thousand_dkk,income_gap_vs_danes,income_ratio_vs_danes,yoy_change_dkk,yoy_change_pct,rolling_3y_mean,base_year_index,real_income_dkk_per_person,group_encoded
+2024,DANSK,Danish origin,427473,1798944709,0,1.0,20129.0,4.941523626222555,405824.0,153.6672166682843,435567.94389114884,0
+2024,IND_ANDRE,Non-western immigrant origin,334282,123493033,93191,0.7819955880254426,14535.0,4.545781508505153,317991.0,164.21630756231517,340612.2104081919,1
+2024,IND_VEST,Western immigrant origin,429375,106950782,-1902,1.0044494038219958,10854.0,2.5934182514139037,406528.0,159.85309337840553,437505.96156543697,2

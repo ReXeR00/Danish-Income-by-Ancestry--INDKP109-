@@ -1,0 +1,10 @@
+metric,group,value,unit,latest_year,source_table,used_in_hypothesis,interpretation_note
+income_dkk_per_person,Danish origin,427473.0,DKK/person,2024,INDKP109,"H2, H3",Latest complete income year.
+income_dkk_per_person,Non-western immigrant origin,334282.0,DKK/person,2024,INDKP109,"H2, H3",Latest complete income year.
+income_dkk_per_person,Western immigrant origin,429375.0,DKK/person,2024,INDKP109,"H2, H3",Latest complete income year.
+population_share,Danish origin,0.8332994455358309,share,2025,FOLK1E,"H1, H4",Latest available population year.
+population_share,Non-western immigrant origin,0.10721717061476119,share,2025,FOLK1E,"H1, H4",Latest available population year.
+population_share,Western immigrant origin,0.05948338384940794,share,2025,FOLK1E,"H1, H4",Latest available population year.
+contribution_index,Danish origin,1.058339032582216,index,2024,INDKP109 + FOLK1E,H4,1.0 means proportional taxable-income representation.
+contribution_index,Non-western immigrant origin,0.5872116445455375,index,2024,INDKP109 + FOLK1E,H4,1.0 means proportional taxable-income representation.
+contribution_index,Western immigrant origin,0.8964614235571365,index,2024,INDKP109 + FOLK1E,H4,1.0 means proportional taxable-income representation.

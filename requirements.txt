@@ -1,0 +1,9 @@
+pandas
+numpy
+requests
+matplotlib
+seaborn
+scipy
+scikit-learn
+statsmodels
+mplcursors

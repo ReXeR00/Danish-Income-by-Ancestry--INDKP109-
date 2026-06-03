@@ -1,0 +1,52 @@
+year,group_code,group_name,income_dkk_per_person,total_income_thousand_dkk
+2008,DANSK,Danish origin,278181,1126308260
+2008,IND_ANDRE,Non-western immigrant origin,203562,42508659
+2008,IND_VEST,Western immigrant origin,268606,30214099
+2009,DANSK,Danish origin,275083,1116504097
+2009,IND_ANDRE,Non-western immigrant origin,206107,44016870
+2009,IND_VEST,Western immigrant origin,268692,31904739
+2010,DANSK,Danish origin,286902,1169515423
+2010,IND_ANDRE,Non-western immigrant origin,202182,45771191
+2010,IND_VEST,Western immigrant origin,257185,34322945
+2011,DANSK,Danish origin,290730,1188795160
+2011,IND_ANDRE,Non-western immigrant origin,204460,47396171
+2011,IND_VEST,Western immigrant origin,259082,36153604
+2012,DANSK,Danish origin,297171,1218893073
+2012,IND_ANDRE,Non-western immigrant origin,210704,50061491
+2012,IND_VEST,Western immigrant origin,261652,38455770
+2013,DANSK,Danish origin,302907,1245778850
+2013,IND_ANDRE,Non-western immigrant origin,214050,51930870
+2013,IND_VEST,Western immigrant origin,268201,42372784
+2014,DANSK,Danish origin,308048,1270433263
+2014,IND_ANDRE,Non-western immigrant origin,218910,54963301
+2014,IND_VEST,Western immigrant origin,273514,45158216
+2015,DANSK,Danish origin,318133,1314994558
+2015,IND_ANDRE,Non-western immigrant origin,224552,59223448
+2015,IND_VEST,Western immigrant origin,286186,50403304
+2016,DANSK,Danish origin,323890,1338489674
+2016,IND_ANDRE,Non-western immigrant origin,225889,63326397
+2016,IND_VEST,Western immigrant origin,284753,53229139
+2017,DANSK,Danish origin,332109,1377866526
+2017,IND_ANDRE,Non-western immigrant origin,230158,67781050
+2017,IND_VEST,Western immigrant origin,292082,57542259
+2018,DANSK,Danish origin,338202,1405137615
+2018,IND_ANDRE,Non-western immigrant origin,240865,72948440
+2018,IND_VEST,Western immigrant origin,299039,61474710
+2019,DANSK,Danish origin,350448,1458949004
+2019,IND_ANDRE,Non-western immigrant origin,253978,78289899
+2019,IND_VEST,Western immigrant origin,314308,66246130
+2020,DANSK,Danish origin,366762,1528207343
+2020,IND_ANDRE,Non-western immigrant origin,269695,84895110
+2020,IND_VEST,Western immigrant origin,337682,73305274
+2021,DANSK,Danish origin,384704,1603382398
+2021,IND_ANDRE,Non-western immigrant origin,288175,92421858
+2021,IND_VEST,Western immigrant origin,357189,80632533
+2022,DANSK,Danish origin,382655,1602571999
+2022,IND_ANDRE,Non-western immigrant origin,299944,99130378
+2022,IND_VEST,Western immigrant origin,371688,88998581
+2023,DANSK,Danish origin,407344,1710288793
+2023,IND_ANDRE,Non-western immigrant origin,319747,111789153
+2023,IND_VEST,Western immigrant origin,418521,100335782
+2024,DANSK,Danish origin,427473,1798944709
+2024,IND_ANDRE,Non-western immigrant origin,334282,123493033
+2024,IND_VEST,Western immigrant origin,429375,106950782

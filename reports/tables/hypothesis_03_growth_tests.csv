@@ -1,0 +1,6 @@
+test,statistic,p_value,status,group_code,group_name,first_year,latest_year,first_income,latest_income,cumulative_growth_pct
+Kruskal-Wallis YoY percentage growth,0.21428571428569398,0.8983973213480803,ok,,,,,,,
+base-year index interaction,,,statsmodels is not installed; install requirements.txt for formula regression,,,,,,,
+cumulative growth,,,ok,DANSK,Danish origin,2008.0,2024.0,278181.0,427473.0,53.66721666828431
+cumulative growth,,,ok,IND_ANDRE,Non-western immigrant origin,2008.0,2024.0,203562.0,334282.0,64.21630756231515
+cumulative growth,,,ok,IND_VEST,Western immigrant origin,2008.0,2024.0,268606.0,429375.0,59.85309337840554

@@ -1,0 +1,4 @@
+check,value,note
+income rows,51,Cleaned income records.
+groups,3,"Expected core groups: DANSK, IND_VEST, IND_ANDRE."
+missing income values,0,Should be zero for core INDKP109 rows.
