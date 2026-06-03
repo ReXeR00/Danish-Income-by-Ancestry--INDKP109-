@@ -80,7 +80,7 @@ python main.py
 
 ## Important Notes
 
-- FOLK1E ancestry/origin population data start in 2008Q1. The project does not fake 2000 population ancestry/origin data.
+
 - Births from `FODIE` are grouped by mother's background and should not be read as the child's final ancestry classification.
 - Migration features are citizenship-based proxies.
 - Deaths by the same ancestry/origin grouping are not included in the current pipeline.
